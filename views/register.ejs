@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="sticky h-[20vh] z-50 flex items-center justify-center">
+      <h1 class="text-sky-500 text-2xl">Register into</h1>
+      <img src="/images/Revamp_SHIELD_V.png" alt="Image" class="h-[100px]" />
+    </div>
+    <ul
+      class="flex items-center justify-between m-2 flex-col flex-row text-gray-800"
+    >
+      <% if(typeof errors != 'undefined') { %> <% errors.forEach(error=>{ %>
+      <li><%= error.message %></li>
+
+      <%}) %> <% } %>
+    </ul>
+    <!-- <ul>
+      <% if(messages.success_msg) { %>
+      <li><%= messages.success_msg %></li>
+      <% } %>
+    </ul> -->
+
+    <form
+      action="/users/register"
+      method="POST"
+      class="border border-indigo-500 mt-8 mx-auto flex items-center justify-between flex-col flex-row justify-center"
+    >
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 p-4 py-2 px-2 rounded-lg justify-between"
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Name"
+          required
+        />
+      </div>
+      <div>
+        <input
+          class="border-2 border-indigo-500 m-2 p-4 py-2 px-2 rounded-lg justify-between"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email address"
+          required
+        />
+      </div>
+      <div>
+        <input
+          class="border-2 border-indigo-500 p-4 py-2 px-2 rounded-lg justify-between"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 p-4 py-2 px-2 rounded-lg justify-between"
+          type="password"
+          id="confirmpassword"
+          name="confirmpassword"
+          placeholder="Confirm Password"
+          required
+        />
+      </div>
+
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 p-2 py-2 px-10 rounded-lg justify-between"
+          type="date"
+          id="date"
+          name="date"
+          placeholder="date"
+          required
+        />
+      </div>
+
+      <div class="relative mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="role"
+          >Role</label
+        >
+        <div
+          class="shadow appearance-none border-2 border-indigo-500 rounded-lg w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <select
+            id="role"
+            name="role"
+            class="w-full bg-white border-none focus:outline-none"
+            required
+          >
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 hover:bg-yellow-500 p-4 py-2 px-2 text-sky-900 rounded-lg justify-between transition-colors duration-300"
+          type="submit"
+          value="Register"
+        />
+      </div>
+      <a
+        href="/users/login"
+        class="mt-2 hover:bg-yellow-500 p-4 py-2 px-2 text-sky-900 rounded-lg transition-colors duration-300"
+        >Already registered?Log in here</a
+      >
+    </form>
+  </body>
+</html>

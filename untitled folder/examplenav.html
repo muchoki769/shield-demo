@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind CSS Navigation Bar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <!--<nav class="bg-blue-500 p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <img src="logo.png" alt="Logo" class="h-8 mr-2" />
+
+        <!-- Menu Toggle (visible in mobile screens) -->
+        <button
+          id="menuToggle"
+          class="lg:hidden text-white focus:outline-none focus:bg-blue-600 rounded px-3 py-1 hover:bg-blue-600"
+        >
+          Menu
+        </button>
+      </div>
+
+      <!-- Navigation Links (visible in large screens) -->
+      <div id="navLinks" class="hidden lg:flex space-x-4 text-white">
+        <a href="#" class="hover:underline">Home</a>
+
+        <!-- Dropdown -->
+        <div class="relative group">
+          <span class="cursor-pointer hover:underline">Dashboard</span>
+          <div
+            class="absolute bg-white w-40 mt-2 rounded-md shadow-lg transform scale-0 group-hover:scale-100 transition-transform origin-top-right"
+          >
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-100"
+              >Upload Data</a
+            >
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-100"
+              >Summarized Data</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="items-center justify-center min-h-screen">
+      <div class="flex items-center mb-4 mt-4 max-w-screen-2xl overflow-hidden">
+        <div class="w-auto flex items-center">
+          <div class="w-full">
+            <button
+              onclick="prev()"
+              class="p-3 transition duration-150 ease-in-out rounded-full bg-white border border-gray-100 shadow-lg mr-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div
+            class="carousel flex items-center transition-transform duration-500 ease-out"
+          >
+            <div
+              class="carousel-item text white text-2xl flex items-center justify-center h-auto"
+            >
+              <img class="" src="images/pexels-divinetechygirl-1181354.jpg" />
+            </div>
+            <div
+              class="carousel-item text-white text-2xl flex items-center justify-center h-auto"
+            >
+              <img class="" src="images/pexels-pixabay-256379.jpg" />
+            </div>
+            <div
+              class="carousel-item text-white text-2xl flex items-center justify-center h-auto"
+            >
+              <img class="" src="images/pexels-pixabay-356056.jpg" />
+            </div>
+          </div>
+
+          <button
+            onclick="next()"
+            class="transition duration-150 ease-in-out p-2 rounded-full bg-white border border-gray-100 shadow-lg ml-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  -->
+    //
+    <script>
+      const carousel = document.querySelector(".carousel");
+      const slides = document.querySelectorAll(".carousel-item");
+      const next = document.getElementById("next");
+      const prev = document.getElementById("prev");
+
+      let index = 0;
+
+      function showSlide(i) {
+        carousel.style.transform = "transform(${-i * 100}%)";
+      }
+
+      next.addEventListener("click", () => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+      });
+
+      prev.addEventListener("click", () => {
+        index = (index - 1 + slides.length) % slides.length;
+        showSlide(index);
+      });
+
+      showSlide(index);
+
+      //const menuToggle = document.getElementById("menuToggle");
+      //const navLinks = document.getElementById("navLinks");
+
+      //menuToggle.addEventListener("click", () => {
+      //navLinks.classList.toggle("hidden");
+    </script>
+    >
+  </body>
+</html>

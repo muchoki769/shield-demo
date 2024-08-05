@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Navbar with Dropdown</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Additional styles for dropdown menu */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        z-index: 10;
+        right: 0;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+      }
+
+      /* Additional styles for dropdown menu items */
+      .dropdown-menu a {
+        display: block;
+        padding: 8px 16px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4">
+      <div
+        class="container mx-auto flex justify-between items-center"
+      >
+        <!-- Logo or Brand -->
+        <div>
+          <span class="text-white text-xl font-bold">Company Logo</span>
+        </div>
+        <!-- Navbar Links -->
+        <div class="hidden md:flex space-x-4">
+          <a href="#" class="text-white hover:text-gray-200">Home</a>
+          <!-- Dashboard Dropdown -->
+          <div class="relative">
+            <button
+              id="dashboard-toggle"
+              class="text-white hover:text-gray-200 focus:outline-none"
+            >
+              Dashboard ▼
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dashboard-menu" class="dropdown-menu">
+              <a href="#" class="block">Summarized Events</a>
+              <a href="#" class="block">Upload Data</a>
+            </div>
+          </div>
+        </div>
+        <!-- Hamburger Menu for Mobile -->
+        <button
+          id="menu-toggle"
+          class="md:hidden text-white focus:outline-none"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Responsive Menu for Mobile -->
+    <div id="mobile-menu" class="md:hidden bg-white">
+      <div class="px-4 py-2">
+        <a href="#" class="block">Home</a>
+        <button id="dashboard-toggle-mobile" class="block">Dashboard ▼</button>
+        <!-- Dropdown Menu for Mobile -->
+        <div id="dashboard-menu-mobile" class="dropdown-menu">
+          <a href="#" class="block">Summarized Events</a>
+          <a href="#" class="block">Upload Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include Tailwind CSS and JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
+    <script>
+      // JavaScript to toggle the dropdown menu in medium screen and above
+      const dashboardToggle = document.getElementById("dashboard-toggle");
+      const dashboardMenu = document.getElementById("dashboard-menu");
+
+      dashboardToggle.addEventListener("click", () => {
+        dashboardMenu.classList.toggle("hidden");
+      });
+
+      // JavaScript to toggle the dropdown menu in small screen (mobile)
+      const dashboardToggleMobile = document.getElementById(
+        "dashboard-toggle-mobile"
+      );
+      const dashboardMenuMobile = document.getElementById(
+        "dashboard-menu-mobile"
+      );
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      dashboardToggleMobile.addEventListener("click", () => {
+        dashboardMenuMobile.classList.toggle("hidden");
+      });
+
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>

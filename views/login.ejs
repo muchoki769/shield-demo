@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>Login</title>
+  </head>
+  <body>
+    <div
+      class="flex items-center mt-2 justify-center sticky h-[20vh] z-50 mx-auto"
+    >
+      <h1 class="text-center p-4 text-2xl text-sky-500">Login to</h1>
+      <img src="/images/Revamp_SHIELD_V.png" alt="Image" class="h-[100px]" />
+    </div>
+
+    <ul>
+      <% if(messages.success_msg) { %>
+      <li><%= messages.success_msg %></li>
+      <% } %>
+    </ul>
+
+    <ul>
+      <% if(messages.error) {%>
+      <li><%= messages.error %></li>
+      <% } %>
+    </ul>
+    <!-- <a 
+    href="/users/index" class="text-white px-4 py-2 transition-colors
+    duration-300 flex items-center"
+     </a> !-->
+    <!-- <button 
+      onclick="plusSlides(-1)"
+      class="flex sm:px-2 mr-2 p-2 transform-translate-y-1/2 rounded-lg bg-white hover:bg-grey-500 border border-gray-100 shadow-lg focus:outline-none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5 8.25 12l7.5-7.5"
+        />
+      </svg>
+     </button> -->
+
+    <form
+      class="border border-indigo-500 py-8 flex items-center flex-row flex-col justify-center mt-2"
+      action="/users/login"
+      method="POST"
+    >
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 py-2 px-2 rounded-lg w-auto transition-all"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email address"
+          required
+        />
+      </div>
+      <div>
+        <input
+          class="border-2 border-indigo-500 py-2 px-2 rounded-lg mt-2"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+
+      <div>
+        <input
+          class="border-2 border-indigo-500 mt-2 p-2 py-2 px-2 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
+          type="submit"
+          value="Login"
+        />
+      </div>
+      <a
+        href="/users/register"
+        class="border-2 border-indigo-500 mt-2 mb-2 p-2 py-2 px-4 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
+        >Not yet registered, Register here..</a
+      >
+      <a
+        href="/users/forgot-password"
+        class="shadow-lg mt-2 mb-2 p-2 py-2 px-4 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
+        >forgot-password?</a
+      >
+    </form>
+  </body>
+</html>
