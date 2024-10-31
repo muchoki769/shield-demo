@@ -27,6 +27,8 @@ const { ROLE, users } = require("./data");
 const PORT = process.env.PORT || 4000;
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const bodyParser = require('body-parser');
+
 
 initializePassport(passport);
 
@@ -55,6 +57,7 @@ app.use(passport.session());
 app.use(flash());
 app.use(express.json());
 app.use(setUser);
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -100,6 +103,7 @@ app.get(
   }
 );
 app.get("/users/delete", authUser, authRole(ROLE.ADMIN), async (req, res) => {
+  
   try {
     const result = await pool.query(`SELECT * FROM users ORDER BY id ASC`);
     res.render("delete", { users: result.rows });
@@ -112,18 +116,27 @@ app.get("/users/edit", authUser, authRole(ROLE.ADMIN), async (req, res) => {
   res.render("edit", { users: result.rows });
 });
 
+
+
 app.get("/projects", authUser, (req, res) => {
   res.render("projects", { user: req.user.name });
 });
 
-app.get("/users/search", async (req, res) => {
-  const { q } = req.query;
-  const results = await pool.query("SELECT * FROM users WHERE email ILIKE $1", [
-    `%${q}`,
-  ]);
-  res.json(results.rows);
-});
+// app.get("/users/search", async (req, res) => {
+//   const { q } = req.query;
+//   const results = await pool.query("SELECT * FROM users WHERE email ILIKE $1", [
+//     `%${q}`,
+//   ]);
+//   res.json(results.rows);
+// });
 
+// app.get("/users/search", (req, res) => {
+//   res.render("search");
+// });
+
+// app.get("/users/search", authUser, (req, res) => {
+//   res.render("search", { user: req.user.name });
+// });
 app.get("/users/forgot-password", (req, res) => {
   res.render("forgot-password");
 });
@@ -297,15 +310,15 @@ function setUser(req, res, next) {
 }
 
 //search users
-function searchusers() {
-  const input = document.getElementById("searchInput").value;
-  fetch(`/users/search?q=${input}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); //process and display your search results
-    })
-    .catch((error) => console.error("Error:", error));
-}
+// function searchusers() {
+//   const input = document.getElementById("searchInput").value;
+//   fetch(`/users/search?q=${input}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data); //process and display your search results
+//     })
+//     .catch((error) => console.error("Error:", error));
+// }
 
 app.post(
   "/users/upload",
@@ -444,6 +457,7 @@ app.post("/users/add", async (req, res) => {
 });
 
 app.post("/users/delete/:id", async (req, res) => {
+ 
   try {
     const { id } = req.params;
     await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
@@ -458,6 +472,8 @@ app.post("/users/edit/:id", async (req, res) => {
   const result = await pool.query(`SELECT * FROM users where id = $1`, [id]);
   res.render("edit", { users: result.rows[0] });
 });
+
+
 
 app.post("/update/:id", async (req, res) => {
   const { id } = req.params;
@@ -516,6 +532,21 @@ app.post("/users/reset-password/:token", async (req, res) => {
   // res.redirect("/users/login");
 });
 
+app.post('/users/search/', async (req, res) => {
+  const searchTerm = req.body.searchTerm;
+  const query = 'SELECT * FROM users WHERE name ILIKE $1 ';
+  const values = [`%${searchTerm}%`];
+
+  try {
+    const result = await pool.query(query, values);
+    res.render('results', {users: result.rows, searchTerm});
+    
+  }catch (err) {
+    console.error(err)
+    res.status(500).send('Server error');
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

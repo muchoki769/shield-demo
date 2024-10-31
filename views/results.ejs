@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for "<%= searchTerm %>"</h1>
+    <ul>
+        <% if (users.length > 0) { %>
+        <% users.forEach(user => { %>
+        <li><strong><%= user.name %></strong> by <%= user.email %></li>
+    <%}); %>
+<%} else { %>
+<li>No results found.</li>
+<%} %>
+
+    </ul>
+    <a href="/">Search Again</a>
+</body>
+</html>
