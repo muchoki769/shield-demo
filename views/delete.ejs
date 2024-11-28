@@ -64,7 +64,7 @@
             <li class="px-2 py-2 md:my-0">
               <div class="relative">
                 <button
-                  id="dropdownButton"
+                  id="dropdownToggle"
                   type="button"
                   class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 block"
                 >
@@ -93,7 +93,7 @@
                 >
                   <div
                     class="py-1"
-                    role="dropdownContent"
+                    role="dropdownToggle"
                     aria-orientation="vertical"
                     aria-labelledby="dropdownContent"
                   >
@@ -256,11 +256,23 @@
         </ul>
       </div>
     </nav>
-    <div class=" flex items-center justify-center p-0 m-2 mb-2 mt-2">
+
+<!-- <div class="container">
+  <h1 class="text-center text-primary mt-3 mb-3">Autocomplete Search</h1>
+
+  <input type="text" id="autocomplete_search" class="form-control form-control-lg"/>
+  <span id="search_result"></span>
+</div> -->
+  <div class="hidden md:block  bg-white rounded-lg shadow  divide-y divide-gray-500 mt-8 mx-4 p-4"> <!-- md:w-1/2 lg:w-1/3 xl:w-1/4 --> 
+
+    <div class="  flex items-center justify-center p-0 m-2 mb-2 mt-2">
      <div class="m-2 p-2 "> <h1>Search for users</h1></div>
-      <form action=" /users/search/" method="POST">
+      <form action=" /users/search" method="POST">
         
         <input  type="text" name="searchTerm" placeholder="Enter a user's name" required>
+<button   class="bg-gray-500 px-3 py-1 m-2 rounded hover:bg-gray-700 transition" type="submit">Search</button>
+      </form>
+    </div>
 
         <!-- <button
         onclick="searchusers()"
@@ -268,27 +280,24 @@
       >
         Search
       </button>  -->
-      <button   class="bg-gray-500 px-3 py-1 m-2 rounded hover:bg-gray-700 transition" type="submit">Search</button>
-      </form>
-    </div>
-
-       <ul>
-        <!-- <% users.forEach(user=> { %>
+      
+       <!-- <ul> 
+        <% users.forEach(user=> { %>
           <li><%= user.name %></li>
-          <% }); %> -->
+          <% }); %> 
           
 
 
-          <!-- <% if (users.length > 0) { %>
+           <% if (users.length > 0) { %>
             <% users.forEach(user => { %>
             <li><strong><%= user.name %></strong> by <%= user.email %></li>
         <%}); %>
     <%} else { %>
     <li>No results found.</li>
     <%} %>
-          -->
+         
       </ul> 
-      
+       -->
       
      
   
@@ -310,6 +319,7 @@
           Search
         </button>
       </div> -->
+      
       <div id="usersList"></div>
       <table
         class=" bg-white rounded-lg shadow divide-y divide-gray-200 min-w-full table-auto"
@@ -380,11 +390,22 @@
         </tbody>
       </table>
     </div>
+  </div>
+    <!-- mobile users list -->
     <div class="md:hidden sm:block flex container mx-auto p-4">
       <span></span>
 
       <ul class="bg-white rounded-lg shadow divide-y divide-gray-200 mt-8 mx-4">
-        <div class="">
+        <div class="  flex items-center justify-center p-0 m-2 mb-2 mt-2">
+          <div class="m-2 p-2 "> <h1>Search for users</h1></div>
+           <form action=" /users/search" method="POST">
+             
+             <input  type="text" name="searchTerm" placeholder="Enter a user's name" required>
+     <button   class="bg-gray-500 px-3 py-1 m-2 rounded hover:bg-gray-700 transition" type="submit">Search</button>
+           </form>
+         </div>
+     
+        <!-- <div class="">
           <input
             type="text"
             placeholder="Search users...."
@@ -398,7 +419,7 @@
             Search
           </button>
           <div id="usersList"></div>
-        </div>
+        </div> -->
 
         <h1
           class="flex text-2xl mb-8 m-2 text-center text-sky-500 font-bold top-0"

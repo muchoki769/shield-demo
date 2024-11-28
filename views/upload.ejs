@@ -64,7 +64,7 @@
             <li class="px-2 py-2 md:my-0">
               <div class="relative">
                 <button
-                  id="dropdownButton"
+                  id="dropdownToggle"
                   type="button"
                   class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 block"
                 >
@@ -93,7 +93,7 @@
                 >
                   <div
                     class="py-1"
-                    role="dropdownContent"
+                    role="dropdownToggle"
                     aria-orientation="vertical"
                     aria-labelledby="dropdownContent"
                   >
@@ -266,46 +266,23 @@
       <p>Upload file here</p>
     </div>
 
+    <ul>
+      <% if(messages.success_msg) { %>
+      <li><%= messages.success_msg %></li>
+      <% } %>
+    </ul>
+
     <div
       class="flex items-center justify-center p-4 py-4 px-4 m-auto mt-2 border-2"
     >
       <form method="POST" action="/users/upload" enctype="multipart/form-data">
-        <input type="file" name="uploads" />
-        <button class="py-2 px-2 border-2 hover:bg-yellow-600 rounded-lg">
+        <input type="file" name="file" required>
+        <button type="submit" class="py-2 px-2 border-2 hover:bg-yellow-600 rounded-lg">
           submit
         </button>
       </form>
     </div>
-    <script>
-      window.addEventListener("click", (e) => {
-        const dashboardMenu = document.getElementById("dashboard-menu");
-        const dashboardToggle = document.getElementById("dashboard-toggle");
-
-        if (!dashboardMenu.contains(e.target) && e.target !== dashboardToggle) {
-          dashboardMenu.classList.remove("translate-y-0");
-          dashboardMenu.classList.add("hidden", "translate-y-4");
-        }
-      });
-
-      // Toggle dashboard menu for small screens
-      const dashboardToggleMobile = document.getElementById(
-        "dashboard-toggle-mobile"
-      );
-      const dashboardMenuMobile = document.getElementById(
-        "dashboard-menu-mobile"
-      );
-
-      dashboardToggleMobile.addEventListener("click", () => {
-        dashboardMenuMobile.classList.toggle("hidden");
-      });
-
-      // Toggle main menu for medium screens and above
-      const menuToggle = document.getElementById("menu-toggle");
-      const Menu = document.getElementById("menu");
-
-      menuToggle.addEventListener("click", () => {
-        Menu.classList.toggle("hidden");
-      });
-    </script>
+   
+    <script src="/javascript/dropdown.js"></script>
   </body>
 </html>

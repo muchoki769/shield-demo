@@ -3,7 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet"> -->
+
   </head>
-  <body></body>
+  <body class="bg-gray-100 p-6">
+    <div class="max-w-lg mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Resource Search</h2>
+      <input type="text" id="search" placeholder="search resources/users.." class="w-full p-3 border rounded-lg">
+      <ul id="results" class="bg-white border mt-2 rounded-lg hidden"></ul>
+    </div>
+
+    <script>
+      const searchInput = document.getElementById('search');
+      const resultsContainer = document.getElementById('results');
+
+      searchInput.addEventListener('input', async () => {
+        const query = searchInput.value.trim();
+        if(query) {
+          const response = await fetch(`/api/search?q=${query}`);
+          const users = await response.json();
+
+
+          resultsContainer.innerHTML = '';
+          users.forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = user.name;
+            li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-200');
+            li.addEventListener('click', () => {
+              searchInput.value = user.name;
+              resultsContainer.classList.add('hidden');
+            });
+            resultsContainer.appendChild(li);
+          });
+          resultsContainer.classList.remove('hidden');
+
+        }else{
+          resultsContainer.classList.add('hidden');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!resultsContainer.contains(e.target) && e.target !== searchInput) {
+          resultContainer.classList.add('hidden');
+        }
+      });
+    </script>
+
+  </body>
 </html>

@@ -118,7 +118,7 @@
         </button>
         <!--menu for medium screen-->
 
-        <div class="hidden md:block flex items-center">
+        <div class="hidden md:block flex items-center justify-end">
           <ul class="md:flex items-center md:w-auto md:static">
             <li class="px-2 py-2">
               <a
@@ -130,9 +130,9 @@
 
             <!--Dashboard dropdown-->
             <li class="px-2 py-2 md:my-0">
-              <div class="relative">
+              <div class="relative inline-block">
                 <button
-                  id="dropdownButton"
+                  id="dropdownToggle"
                   type="button"
                   class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 block"
                 >
@@ -157,11 +157,11 @@
 
                 <div
                   id="dropdownContent"
-                  class="flex items-center w-auto shadow-lg justify-center hover:bg-blue-500 absolute left-0 translate-y-4 transition-all mt-2 bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
+                  class="flex items-center  mt-2  w-auto shadow-lg justify-center hover:bg-blue-500 absolute  left-0 translate-y-4 transition-all  bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
                 >
                   <div
                     class="py-1"
-                    role="dropdownContent"
+                    role="dropdownToggle"
                     aria-orientation="vertical"
                     aria-labelledby="dropdownContent"
                   >
@@ -204,7 +204,7 @@
             </li>
             <li class="px-2 py-2">
               <a
-                href="resources.js"
+                href="/users/resources"
                 class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300"
                 >Resources</a
               >
@@ -235,7 +235,7 @@
 
           <!--Dashboard dropdown-->
           <li class="py-2 px-0">
-            <div class="relative">
+            <div class="relative inline-block">
               <button
                 id="dashboard-toggle-mobile"
                 type="button"
@@ -309,7 +309,7 @@
           </li>
           <li class="py-2 px-0">
             <a
-              href="resources.js"
+              href="/users/resources"
               class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300"
               >Resources</a
             >
@@ -686,5 +686,8 @@
         mobileMenu.classList.toggle("hidden");
       });
     </script>-->
+    
+    <!-- <p contenteditable="true" class="py-10 px-10" >I am A Software Developer</p> -->
+  
   </body>
 </html>

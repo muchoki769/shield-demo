@@ -9,16 +9,46 @@ const initializePassport = require("./passportConfig");
 // const fileUpload = require("express-fileupload");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs-extra");
+// const uploadDir = path.join(__dirname, "uploads");
+// if (!fs.existsSync(uploadDir)) {
+//   fs.mkdirSync(uploadDir);
+// }
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/uploads");
+    cb(null, path.join (__dirname, "/public/uploads"));
   },
   filename: (req, file, cb) => {
-    console.log(file);
-    cb(null, Date.now() + path.extname(file.originalname));
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    // console.log(file);
+    // cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, uniqueSuffix + '-' + file.originalname);
   },
 });
-const upload = multer({ storage: storage }); //upload middleware
+
+//File filter to allow specific filetypes
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel",
+  ];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  }else {
+    cb(new Error("Only .jpeg, .png, .docx, .doc, .xlsx, and .xls files are allowed!"), false);
+  }
+};
+// const upload = multer({ storage: storage }); //upload 
+// file size limit and file filter
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024}, //5mb
+  fileFilter: fileFilter,
+});
 // const { authCourse, authPage } = require("./middlewaresroles");
 const { authUser, authRole } = require("./basicAuth");
 const { ROLE, users } = require("./data");
@@ -27,7 +57,7 @@ const { ROLE, users } = require("./data");
 const PORT = process.env.PORT || 4000;
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 
 initializePassport(passport);
@@ -130,9 +160,9 @@ app.get("/projects", authUser, (req, res) => {
 //   res.json(results.rows);
 // });
 
-// app.get("/users/search", (req, res) => {
-//   res.render("search");
-// });
+app.get("/users/resources",(req, res) => {
+  res.render("resources");
+});
 
 // app.get("/users/search", authUser, (req, res) => {
 //   res.render("search", { user: req.user.name });
@@ -177,6 +207,20 @@ app.get("/users/logout", (req, res, next) => {
     req.flash("success_msg", "You have logged out");
     res.redirect("/users/login");
   });
+});
+
+app.get('/api/search', async (req, res) => {
+  const query = req.query.q;
+  try{
+    const result = await pool.query(
+      'SELECT name FROM users WHERE name ILIKE $1 LIMIT 5',
+      [`%${query}%`]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'Database error'});
+  }
 });
 app.post("/users/register", async (req, res) => {
   let { name, email, password, confirmpassword, date, role } = req.body;
@@ -320,79 +364,117 @@ function setUser(req, res, next) {
 //     .catch((error) => console.error("Error:", error));
 // }
 
-app.post(
-  "/users/upload",
-  upload.single("uploads"),
-  (req, res) => {
-    // console.log(req.file);
+app.post("/users/upload", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file){
+      return res.status(400).send("No file uploaded or invalid file type.");
 
-    let {
-      userid,
-      fieldname,
-      originalname,
-      mimetype,
-      destination,
-      filename,
-      path,
-      size,
-    } = req.body;
+    }
 
-    console.log({
-      userid,
-      fieldname,
-      originalname,
-      mimetype,
-      destination,
-      filename,
-      path,
-      size,
-    });
-    pool.query(
-      `SELECT * FROM upload WHERE originalname = $1`,
-      [originalname],
-      (err, results) => {
-        if (err) {
-          throw err;
-        }
-        console.log(results.rows);
+    const fileData = {
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      path: req.file.path,
+    };
 
-        if (results.rows.length > 0) {
-          errors.push({ message: "image already there" });
-          res.render("upload", { errors });
-        } else {
-          pool.query(
-            `INSERT INTO upload (userid, fieldname, originalname, mimetype, destination, filename, path, size
-) VALUES ($1, $2, $3, $4, $5, $6,$7, $8 ) RETURNING id, path`,
-            [
-              userid,
-              fieldname,
-              originalname,
-              mimetype,
-              destination,
-              filename,
-              path,
-              size,
-            ],
-            (err, results) => {
-              if (err) {
-                throw err;
-              }
-              console.log(results.rows);
-              req.flash(
-                "success_message ",
-                "You are now registered.Please log in "
-              );
-              res.redirect("/users/upload");
-            }
-          );
-        }
-      }
-    );
+    const queryText = `
+    INSERT INTO files (filename, originalname, mimetype, size, path) VALUES ($1, $2, $3, $4, $5)
+    `;
+
+    await pool.query(queryText, [
+      fileData.filename,
+      fileData.originalname,
+      fileData.mimetype,
+      fileData.size,
+      fileData.path,
+    ]);
+
+    // req.flash("success_message", "File has been added successfully");
+     res.status(201).send("File has been added successfully");
+              // res.redirect("/users/upload");
+    // res.send("File uploaded succesfully and metadata saved.");
+    
+  }catch (error) {
+    console.error(error);
+    res.status(500).send("Server error.Could not upload file.");
   }
+});
+
+// app.post(
+//   "/users/upload",
+//   upload.single("uploads"),
+//   (req, res) => {
+//     // console.log(req.file);
+
+//     let {
+//       userid,
+//       fieldname,
+//       originalname,
+//       mimetype,
+//       destination,
+//       filename,
+//       path,
+//       size,
+//     } = req.body;
+
+//     console.log({
+//       userid,
+//       fieldname,
+//       originalname,
+//       mimetype,
+//       destination,
+//       filename,
+//       path,
+//       size,
+//     });
+//     pool.query(
+//       `SELECT * FROM upload WHERE originalname = $1`,
+//       [originalname],
+//       (err, results) => {
+//         if (err) {
+//           throw err;
+//         }
+//         console.log(results.rows);
+
+//         if (results.rows.length > 0) {
+//           errors.push({ message: "image already there" });
+//           res.render("upload", { errors });
+//         } else {
+//           pool.query(
+//             `INSERT INTO upload (userid, fieldname, originalname, mimetype, destination, filename, path, size
+// ) VALUES ($1, $2, $3, $4, $5, $6,$7, $8 ) RETURNING id, path`,
+//             [
+//               userid,
+//               fieldname,
+//               originalname,
+//               mimetype,
+//               destination,
+//               filename,
+//               path,
+//               size,
+//             ],
+//             (err, results) => {
+//               if (err) {
+//                 throw err;
+//               }
+//               console.log(results.rows);
+//               req.flash(
+//                 "success_message ",
+//                 "You are now registered.Please log in "
+//               );
+//               res.redirect("/users/upload");
+//             }
+//           );
+//         }
+//       }
+//     );
+//   }
 
   // res.send("Image Uploaded");
   // res.send("Image Uploaded");
-);
+// );
 app.post("/users/add", async (req, res) => {
   let { name, email, password, confirmpassword, date, role } = req.body;
 
@@ -500,13 +582,14 @@ app.post("/users/forgot-password", async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "",
-      pass: process.env.EMAIL_PASSWORD,
+      user: "ndungudavidmuchoki@gmail.com",
+      pass: ""
+      // pass: process.env.EMAIL_PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: "ndungu@gmail.com",
+    from: "ndungudavidmuchokigmail.com",
     to: email,
     subject: " Password Reset",
     text: `You can reset your password by clicking on this link: http://localhost:4000`,
@@ -532,7 +615,7 @@ app.post("/users/reset-password/:token", async (req, res) => {
   // res.redirect("/users/login");
 });
 
-app.post('/users/search/', async (req, res) => {
+app.post('/users/search', async (req, res) => {
   const searchTerm = req.body.searchTerm;
   const query = 'SELECT * FROM users WHERE name ILIKE $1 ';
   const values = [`%${searchTerm}%`];
