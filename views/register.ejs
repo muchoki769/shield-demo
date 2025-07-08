@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="/css/styles.css" rel="stylesheet">
   </head>
   <body>
     <div class="sticky h-[20vh] z-50 flex items-center justify-center">
@@ -28,14 +29,17 @@
     <form
       action="/users/register"
       method="POST"
-      class="border border-indigo-500 mt-8 mx-auto flex items-center justify-between flex-col flex-row justify-center"
+      class="border border-indigo-500 mt-8 mx-auto flex items-center justify-between flex-col m-2 p-2 justify-center"
     >
+    <!-- <input type="hidden" name="_csrf" value="<%= csrfToken %>" /> -->
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div>
         <input
-          class="border-2 border-indigo-500 mt-2 p-4 py-2 px-2 rounded-lg justify-between"
-          type="text"
+          class="border-2 border-indigo-500 mt-2 p-4 py-2 px-2 m-2 p-2 rounded-lg justify-between"
+          type="hidden"
           id="name"
-          name="name"
+          name="_csrf"
+          value="<%=csrfToken %>"
           placeholder="Name"
           required
         />

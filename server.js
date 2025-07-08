@@ -4,12 +4,19 @@ const { pool } = require("./dbConfig");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const flash = require("express-flash");
+// const flash = require("connect-flash");
 const passport = require("passport");
 const initializePassport = require("./passportConfig");
 // const fileUpload = require("express-fileupload");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs-extra");
+const helmet = require("helmet");
+require ('dotenv').config();
+const  secretKey = process.env.SECRET_KEY;
+const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
+// const csrfProtection = csrf({ cookie: true });
 // const uploadDir = path.join(__dirname, "uploads");
 // if (!fs.existsSync(uploadDir)) {
 //   fs.mkdirSync(uploadDir);
@@ -58,25 +65,42 @@ const PORT = process.env.PORT || 4000;
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const bodyParser = require("body-parser");
+const https = require('https');
+const cors = require('cors');
+
+
+
 
 
 initializePassport(passport);
 
+//middlewares setup
+
+app.set('views', path.join(__dirname,'views'));
 app.set("view engine", "ejs");
 
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public",
+  // {
+  // maxAge:'1d',
+  // immutable: true //browser not to revalidate
+// }
+)));
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "secret",
+    secret: process.env.SECRET_KEY,
 
     resave: false,
 
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      secure:true,
+      maxAge: 60*60*1000,//1000 * 60 * 60 * 24 * 7, // 1 week
+      httpOnly: true,
+      sameSite: 'Strict'
     },
   })
 );
@@ -88,10 +112,61 @@ app.use(flash());
 app.use(express.json());
 app.use(setUser);
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(helmet());
+app.use((req, res, next)=>{
+  res.locals.secretKey = secretKey;
+  next();
+});
+app.use(cookieParser());
+// const csrfProtection = csrf({ cookie: true });
+// const csrfProtection = csrf();
+
+// app.use(csrf({
+//   cookie: {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
+//     sameSite: 'Strict'
+//   }
+// }));
+const csrfProtection = csrf ({
+  cookie:{
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: "Strict"
+  }
+});
+app.use(csrfProtection);
+app.use((req,res, next) => {
+  res.locals.csrfToken = req.csrfToken();//token available in views
+  res.locals.user = req.user || null;
+  next();
+});
+// app.use((err, req, res, next) => {
+//   if (err.code === "EBADCSRFTOKEN") {
+//     res.status(403).send("CSRF token validation failed.");
+//   } else {
+//     next(err);
+//   }
+// });
+app.use(cors()); //allows communication with backende and frontend
+// app.use(cors({
+//   origin: 'http://localhost:3000', // Replace with your frontend URL
+//   methods: 'GET,POST,PUT,DELETE',
+//   allowedHeaders: 'Content-Type,Authorization'
+// }));
+
+
+
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index",{url:req.protocol+"://"+req.headers.host});
 });
+
+app.get('/csrf-token',( req,res) => {
+  res.json({csrfToken:req.csrfToken()});
+});
+
+
 
 app.get("/users/register", checkAuthenticated, (req, res) => {
   res.render("register");
@@ -110,7 +185,9 @@ app.get("/users/upload", authUser, (req, res) => {
 });
 
 app.get("/users/admin", authUser, authRole(ROLE.ADMIN), (req, res) => {
+  setTimeout(()=>{
   res.render("admin", { user: req.user.name });
+},1000);
 });
 
 app.get(
@@ -185,6 +262,10 @@ app.get("/users/reset-password/:token", async (req, res) => {
   }
 });
 
+// app.get('/users/login', (req, res) => {
+//   res.render('login', { csrfToken: req.csrfToken() });
+// });
+
 // app.get("/course/grades", authPage(["manager", "admin"]), (req, res) => {
 //   res.json({
 //     pedro: 100,
@@ -200,12 +281,15 @@ app.get("/users/reset-password/:token", async (req, res) => {
 // });
 
 app.get("/users/logout", (req, res, next) => {
-  req.logout((err) => {
+  req.session.destroy((err)=> {
+  // req.logout((err) => {
     if (err) {
       return next(err);
     }
     req.flash("success_msg", "You have logged out");
+    res.clearCookie(connect.sid);
     res.redirect("/users/login");
+  // });
   });
 });
 
@@ -628,6 +712,13 @@ app.post('/users/search', async (req, res) => {
     console.error(err)
     res.status(500).send('Server error');
   }
+});
+
+app.post('/submit', csrfProtection, (req, res) => {
+  // Handle form submission
+  console.log("Received Request Body:", req.body);
+  console.log("Received CSRF Token:", req.body._csrf);
+  res.send('Form successfully submitted!');
 });
 
 app.listen(PORT, () => {

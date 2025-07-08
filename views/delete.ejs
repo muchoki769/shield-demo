@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Delete Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="/css/styles.css" rel="stylesheet">
   </head>
   <body>
     <nav
@@ -268,6 +269,7 @@
     <div class="  flex items-center justify-center p-0 m-2 mb-2 mt-2">
      <div class="m-2 p-2 "> <h1>Search for users</h1></div>
       <form action=" /users/search" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         
         <input  type="text" name="searchTerm" placeholder="Enter a user's name" required>
 <button   class="bg-gray-500 px-3 py-1 m-2 rounded hover:bg-gray-700 transition" type="submit">Search</button>

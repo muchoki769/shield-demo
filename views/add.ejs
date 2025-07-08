@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add user</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="/css/styles.css" rel="stylesheet">
   </head>
   <body class="bg-white">
     <div class="flex items-center flex-row mt-2 ml-8">
@@ -291,6 +292,7 @@
       method="POST"
       class="border-2 border-indigo-500 border-box border-y-2 border-x-2 m-4 p-4 mb-2 mx-auto flex items-center justify-center justify-between flex-col flex-row"
     >
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div>
         <input
           class="border-2 border-indigo-500 mt-2 p-4 py-2 px-2 rounded-lg justify-between"

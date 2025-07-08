@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- <link href="public/css/tailwind.css" rel="stylesheet"> -->
+    <!-- <link href="./output.css" rel="stylesheet"> -->
+     <!-- <link href="./output.css" rel="stylesheet"> -->
+     <link href="/css/styles.css" rel="stylesheet">
     <title>Login</title>
   </head>
-  <body>
+  <body class="bg-white">
     <div
       class="flex items-center mt-2 justify-center sticky h-[20vh] z-50 mx-auto"
     >
@@ -51,13 +55,16 @@
      </button> -->
 
     <form
-      class="border border-indigo-500 py-8 flex items-center flex-row flex-col justify-center mt-2"
+      class="border border-indigo-500 py-8 flex items-center  flex-col m-2 p-2 justify-center mt-2"
       action="/users/login"
       method="POST"
     >
+   
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    
       <div>
         <input
-          class="border-2 border-indigo-500 mt-2 py-2 px-2 rounded-lg w-auto transition-all"
+          class="border-2 border-indigo-500 mt-2 py-2 px-2 m-2 p-2 rounded-lg w-auto transition-all"
           type="email"
           id="email"
           name="email"
@@ -67,7 +74,7 @@
       </div>
       <div>
         <input
-          class="border-2 border-indigo-500 py-2 px-2 rounded-lg mt-2"
+          class="border-2 border-indigo-500 py-2 px-2 m-2 p-2 rounded-lg mt-2"
           type="password"
           id="password"
           name="password"
@@ -78,7 +85,7 @@
 
       <div>
         <input
-          class="border-2 border-indigo-500 mt-2 p-2 py-2 px-2 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
+          class="border-2 border-indigo-500 mt-2 p-2 py-2 px-2 m-2 p-2 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
           type="submit"
           value="Login"
         />
@@ -90,7 +97,7 @@
       >
       <a
         href="/users/forgot-password"
-        class="shadow-lg mt-2 mb-2 p-2 py-2 px-4 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
+        class="shadow-lg mt-2 mb-2 p-2 py-2 px-4 m-2 p-2 hover:bg-yellow-500 text-sky-900 rounded-lg transition-colors duration-300"
         >forgot-password?</a
       >
     </form>
