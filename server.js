@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 const { pool } = require("./dbConfig");
+const createStore = require("./sessionStore");
+// const pgSession = require("connect-pg-simple")(session);
+// const { Pool } = require("pg");
+
 const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const flash = require("express-flash");
@@ -13,8 +17,9 @@ const multer = require("multer");
 const fs = require("fs-extra");
 const helmet = require("helmet");
 require ('dotenv').config();
-const  secretKey = process.env.SECRET_KEY;
-const csrf = require('csurf');
+// const  secretKey = process.env.SECRET_KEY;
+// const csrf = require('csurf');
+const lusca = require('lusca')
 const cookieParser = require('cookie-parser');
 // const csrfProtection = csrf({ cookie: true });
 // const uploadDir = path.join(__dirname, "uploads");
@@ -65,8 +70,24 @@ const PORT = process.env.PORT || 4000;
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const bodyParser = require("body-parser");
-const https = require('https');
+// const https = require('https');
 const cors = require('cors');
+const store = createStore(session);
+
+
+// const pool= new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// });
+// const store = new pgSession ({
+//   pool: pool,
+//   tableName: "user_sessions",
+//     createTableIfMissing: true,
+//     ttl: 86400,
+//     pruneSessionInterval: 3600
+// });
 
 
 
@@ -97,11 +118,15 @@ app.use(
 
     saveUninitialized: true,
     cookie: {
-      secure:true,
-      maxAge: 60*60*1000,//1000 * 60 * 60 * 24 * 7, // 1 week
+      // secure:true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000,//1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
-      sameSite: 'Strict'
+      // sameSite: 'Strict'
+      sameSite: 'lax'
     },
+    // store: session.MemoryStore()
+    store: store,
   })
 );
 
@@ -113,11 +138,12 @@ app.use(express.json());
 app.use(setUser);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
-app.use((req, res, next)=>{
-  res.locals.secretKey = secretKey;
-  next();
-});
+// app.use((req, res, next)=>{
+//   res.locals.secretKey = secretKey;
+//   next();
+// });
 app.use(cookieParser());
+// app.use(lusca.csrf())
 // const csrfProtection = csrf({ cookie: true });
 // const csrfProtection = csrf();
 
@@ -128,19 +154,20 @@ app.use(cookieParser());
 //     sameSite: 'Strict'
 //   }
 // }));
-const csrfProtection = csrf ({
-  cookie:{
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: "Strict"
-  }
-});
-app.use(csrfProtection);
-app.use((req,res, next) => {
-  res.locals.csrfToken = req.csrfToken();//token available in views
-  res.locals.user = req.user || null;
-  next();
-});
+
+// const csrfProtection = csrf ({
+//   cookie:{
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: "Strict"
+//   }
+// });
+// app.use(csrfProtection);
+// app.use((req,res, next) => {
+//   res.locals.csrfToken = req.csrfToken();//token available in views
+//   res.locals.user = req.user || null;
+//   next();
+// });
 // app.use((err, req, res, next) => {
 //   if (err.code === "EBADCSRFTOKEN") {
 //     res.status(403).send("CSRF token validation failed.");
@@ -161,10 +188,13 @@ app.use(cors()); //allows communication with backende and frontend
 app.get("/", (req, res) => {
   res.render("index",{url:req.protocol+"://"+req.headers.host});
 });
+// app.get("/", (req, res) => {
+//   res.render("index");
+// });
 
-app.get('/csrf-token',( req,res) => {
-  res.json({csrfToken:req.csrfToken()});
-});
+// app.get('/csrf-token',( req,res) => {
+//   res.json({csrfToken:req.csrfToken()});
+// });
 
 
 
@@ -430,7 +460,7 @@ function checkAuthenticated(req, res, next) {
 }
 
 function setUser(req, res, next) {
-  const userId = req.body.userId;
+  const userId = req.body?.userId;
   if (userId) {
     req.user = users.find((user) => user.id === userId);
   }
@@ -714,12 +744,12 @@ app.post('/users/search', async (req, res) => {
   }
 });
 
-app.post('/submit', csrfProtection, (req, res) => {
-  // Handle form submission
-  console.log("Received Request Body:", req.body);
-  console.log("Received CSRF Token:", req.body._csrf);
-  res.send('Form successfully submitted!');
-});
+// app.post('/submit', csrfProtection, (req, res) => {
+//   // Handle form submission
+//   console.log("Received Request Body:", req.body);
+//   console.log("Received CSRF Token:", req.body._csrf);
+//   res.send('Form successfully submitted!');
+// });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
