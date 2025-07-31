@@ -118,9 +118,9 @@ app.use(
 
     saveUninitialized: true,
     cookie: {
-      // secure:true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 1000,//1000 * 60 * 60 * 24 * 7, // 1 week
+      secure:true,
+      // secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000,//1h//1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
       // sameSite: 'Strict'
       sameSite: 'lax'
