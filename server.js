@@ -118,8 +118,8 @@ app.use(
 
     saveUninitialized: true,
     cookie: {
-      secure:true,
-      // secure: process.env.NODE_ENV === 'production',
+      // secure:true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 1000,//1h//1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
       // sameSite: 'Strict'
@@ -365,6 +365,7 @@ app.post("/users/register", async (req, res) => {
     res.status(400).render("register", { errors });
   } else {
     //registration logic
+    
     let hashedPassword = await bcrypt.hash(password, 10);
 
     console.log(hashedPassword);
