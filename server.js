@@ -122,8 +122,8 @@ app.use(
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 1000,//1h//1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
-      // sameSite: 'Strict'
-      sameSite: 'lax'
+      sameSite: 'Strict'
+      // sameSite: 'lax'
     },
     // store: session.MemoryStore()
     store: store,

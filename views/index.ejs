@@ -77,10 +77,10 @@
   <body class="bg-white">
     <!--Navigation bar-->
     <nav
-      class="sticky top-0 z-50 bg-white min-h-fit shadow-lg px-5 md:w-auto w-full left-0 justify-between top-[0%]"
+      class="sticky  z-50 bg-white min-h-fit shadow-lg px-5 md:w-auto w-full left-0 justify-between top-[0%]"
     >
       <div
-        class="flex flex-row mx-auto flex items-center gap-[4vw] gap-8 justify-between p-4"
+        class="flex flex-row mx-auto  items-center gap-[4vw] justify-between p-4"
       >
         <!--logo -->
         <div class="flex items-center py-4">
@@ -119,7 +119,7 @@
         </button>
         <!--menu for medium screen-->
 
-        <div class="hidden md:block flex items-center">
+        <div class="hidden md:block  items-center">
           <ul class="md:flex items-center md:w-auto md:static">
             <li class="px-2 py-2">
               <a
@@ -132,15 +132,15 @@
             <!--Dashboard dropdown-->
             <li class="px-2 py-2 md:my-0">
               <div class="relative">
-                <button
+                <!-- <button
                   id="dashboard-toggle"
                   type="button"
-                  class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 block"
+                  class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 "
                 >
-                  Dashboard
+                  Dashboard -->
                   <!-- Heroicon name: chevron-down -->
 
-                  <svg
+                  <!-- <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -154,18 +154,18 @@
                       d="m19.5 8.25-7.5 7.5-7.5-7.5"
                     />
                   </svg>
-                </button>
+                </button> -->
 
-                <div
+                <!-- <div
                   id="dashboard-menu"
-                  class="flex items-center w-auto justify-center hover:bg-blue-500 absolute left-0 translate-y-4 transition-all mt-2 bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
+                  class=" items-center w-auto justify-center hover:bg-blue-500 absolute left-0 translate-y-4 transition-all mt-2 bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
                 >
                   <div
                     class="py-1"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="dashboard-toggle"
-                  >
+                  > -->
                     <!-- <a
                       href="summarized.js"
                       class="block py-2 px-4 text-gray-800 hover:bg-blue-200"
@@ -224,7 +224,7 @@
       
       <!--Menu for mobile screen-->
       <div
-        class="md:hidden flex items-center justify-between hidden transition-all duration-300"
+        class="md:hidden flex items-center justify-between  transition-all duration-300"
         id="menu"
       >
         <ul class="w-auto">
@@ -239,16 +239,16 @@
           <!--Dashboard dropdown-->
           <li class="py-2 px-0">
             <div class="relative">
-              <button
+              <!-- <button
                 id="dashboard-toggle-mobile"
                 type="button"
-                class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 block"
+                class="text-gray-800 bg-black-500 rounded-lg px-4 py-2 hover:bg-blue-500 transition-colors duration-300 flex items-center justify-between space-x-2 "
               >
-                Dashboard
+                Dashboard -->
 
                 <!-- Heroicon name: chevron-down -->
 
-                <svg
+                <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -262,11 +262,11 @@
                     d="m19.5 8.25-7.5 7.5-7.5-7.5"
                   />
                 </svg>
-              </button>
+              </button> -->
 
               <div
                 id="dashboard-menu-mobile"
-                class="flex items-center w-auto justify-center hover:bg-blue-500 absolute left-0 translate-y-4 transition-all mt-2 bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
+                class=" items-center w-auto justify-center hover:bg-blue-500 absolute left-0 translate-y-4 transition-all mt-2 bg-blue-200 rounded-md shadow-lg focus:outline-none hidden"
               >
                 <div
                   class="py-2 px-0"
@@ -337,7 +337,7 @@
         <div class="slideshow container">
           <button
             onclick="plusSlides(-1)"
-            class="hidden md:block flex absolute top-1/2 left-0 sm:px-2 mr-2 p-2 transform-translate-y-1/2 rounded-full bg-white hover:bg-grey-500 border border-gray-100 shadow-lg focus:outline-none"
+            class="hidden md:block  absolute top-1/2 left-0 sm:px-2 mr-2 p-2 transform-translate-y-1/2 rounded-full bg-white hover:bg-grey-500 border border-gray-100 shadow-lg focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -372,7 +372,7 @@
 
           <button
             onclick="plusSlides(1)"
-            class="hidden md:block flex absolute top-1/2 right-0 sm:px-2 transform-translate-y-1/2 p-2 rounded-full bg-white border border-gray-100 shadow-lg ml-2 focus:outline-none"
+            class="hidden md:block  absolute top-1/2 right-0 sm:px-2 transform-translate-y-1/2 p-2 rounded-full bg-white border border-gray-100 shadow-lg ml-2 focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -582,10 +582,10 @@
     <!--Footer for md-->
     <footer class="">
       <div
-        class="hidden md:block flex items-center max-w-screen-2xl justify-between bg-sky-500 px-4 mt-8"
+        class="hidden md:block  items-center max-w-screen-2xl justify-between bg-sky-500 px-4 mt-8"
       >
         <ul
-          class="flex items-center justify-center mx-auto p-4 m-auto gap-[4vw] gap-8 py-4 px-4 justify-between"
+          class="flex items-center justify-center mx-auto p-4 m-auto gap-[4vw] py-4 px-4 "
         >
           <li>
             <img
@@ -634,7 +634,7 @@
         class="md:hidden bg-sky-500 mt-2 justify-between max-w-screen-2xl py-8 w-auto"
       >
         <ul
-          class="mx-auto p-4 m-auto gap-[4vw] gap-8 py-4 px-4 justify-between"
+          class="mx-auto p-4 m-auto gap-[4vw]  py-4 px-4 justify-between"
         >
           <li>
             <center>
@@ -649,7 +649,7 @@
           <li class="py-2 text-white">
             <a href="health.go.ke">https://www.health.go.ke</a>
           </li>
-          <li class="mt-4 mt-0 flex flex-col flex-row">
+          <li class="mt-4  flex flex-col md:flex-row">
             <a
               href="helpandsupport.js"
               class="rounded-lg text-white transition-colors duration-300"
