@@ -1,7 +1,7 @@
 User-agent: *
 Disallow: /admin
 Allow:/
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://shield-demo.onrender.com/sitemap.xml
 
 
 

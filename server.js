@@ -19,7 +19,7 @@ const helmet = require("helmet");
 require ('dotenv').config();
 // const  secretKey = process.env.SECRET_KEY;
 // const csrf = require('csurf');
-const lusca = require('lusca')
+// const lusca = require('lusca')
 const cookieParser = require('cookie-parser');
 // const csrfProtection = csrf({ cookie: true });
 // const uploadDir = path.join(__dirname, "uploads");
@@ -99,6 +99,11 @@ initializePassport(passport);
 
 app.set('views', path.join(__dirname,'views'));
 app.set("view engine", "ejs");
+// Middleware to set charset
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  next();
+});
 
 
 app.use(express.static(path.join(__dirname, "public",
@@ -107,9 +112,10 @@ app.use(express.static(path.join(__dirname, "public",
   // immutable: true //browser not to revalidate
 // }
 )));
+app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
-// app.set('trust proxy', 1);
+app.set('trust proxy', 1);
 
 app.use(
   session({
@@ -121,7 +127,7 @@ app.use(
     cookie: {
       secure:true,
       // secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 1000,//1h//1000 * 60 * 60 * 24 * 7, // 1 week
+      maxAge: 24 * 60 * 60 * 1000, //24hrs  //60 * 60 * 1000,//1h//1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
       sameSite: 'Strict'
       // sameSite: 'lax'
@@ -130,6 +136,10 @@ app.use(
     store: store,
   })
 );
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   sess.cookie.secure = true // serve secure cookies
+// }
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -487,6 +497,11 @@ app.post("/users/upload", upload.single("file"), async (req, res) => {
 
     }
 
+    const userId = req.user.id; // Assuming user is authenticated and user ID is available
+    if (!userId) {
+      return res.status(401).send("Unauthorized");
+    }
+
     const fileData = {
       filename: req.file.filename,
       originalname: req.file.originalname,
@@ -496,7 +511,7 @@ app.post("/users/upload", upload.single("file"), async (req, res) => {
     };
 
     const queryText = `
-    INSERT INTO files (filename, originalname, mimetype, size, path) VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO files (filename, originalname, mimetype, size, path, user_id) VALUES ($1, $2, $3, $4, $5 , $6) RETURNING id
     `;
 
     await pool.query(queryText, [
@@ -505,11 +520,12 @@ app.post("/users/upload", upload.single("file"), async (req, res) => {
       fileData.mimetype,
       fileData.size,
       fileData.path,
+      userId,
     ]);
 
-    // req.flash("success_message", "File has been added successfully");
-     res.status(201).send("File has been added successfully");
-              // res.redirect("/users/upload");
+    req.flash("success_message", "File has been added successfully");
+    //  res.status(201).send("File has been added successfully");
+              res.redirect("/users/upload");
     // res.send("File uploaded succesfully and metadata saved.");
     
   }catch (error) {
@@ -756,3 +772,4 @@ app.post('/users/search', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+module.exports = app; // Export the app for testing purposes

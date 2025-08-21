@@ -41,6 +41,7 @@ module.exports = function(session) {
      ssl: {
         rejectUnauthorized: false
     },
+    client_encoding: 'utf8',
    
   });
 
@@ -51,7 +52,7 @@ module.exports = function(session) {
     tableName: 'user_sessions',
     createTableIfMissing: true,
     ttl: 86400, // 1 day in seconds
-    pruneSessionInterval: 3600 // Cleanup every hour
+    pruneSessionInterval: 86400 // Cleanup every hour
   });
 };
 
